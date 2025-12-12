@@ -1,17 +1,3 @@
-const path = require('path')
+const createBaseNextConfig = require('@gaqno-dev/frontcore/config/next.config.base.js');
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  output: 'standalone',
-  transpilePackages: ["@gaqno-dev/ui", "@gaqno-dev/core"],
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': path.resolve(__dirname, './src'),
-    }
-    return config
-  },
-}
-
-module.exports = nextConfig
+module.exports = createBaseNextConfig();
