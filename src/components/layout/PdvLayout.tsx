@@ -1,6 +1,6 @@
-'use client'
 
-import { FeatureGuard } from '@gaqno-dev/ui/components/guards'
+
+import { FeatureGuard } from '@gaqno-dev/frontcore/components/guards'
 import { FeatureModule, FeaturePermissionLevel } from '@gaqno-dev/frontcore/types/user'
 
 export function PdvLayout({ children }: { children: React.ReactNode }) {
