@@ -28,9 +28,10 @@ WORKDIR /app
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY --from=builder /app/public /usr/share/nginx/html/public
 
-RUN echo 'server { listen 3008; server_name _; root /usr/share/nginx/html; index index.html; \
+RUN echo 'server { listen 3006; server_name _; root /usr/share/nginx/html; index index.html; \
+    location /pdv/ { alias /usr/share/nginx/html/; try_files $uri $uri/ /pdv/index.html; add_header Access-Control-Allow-Origin "*"; } \
     location / { try_files $uri $uri/ /index.html; } \
     location /assets { add_header Cache-Control "public, immutable"; add_header Access-Control-Allow-Origin "*"; } }' > /etc/nginx/conf.d/default.conf
 
-EXPOSE 3008
+EXPOSE 3006
 CMD ["nginx", "-g", "daemon off;"]
