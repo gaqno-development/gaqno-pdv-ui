@@ -11,25 +11,25 @@ export interface MenuItem {
 
 export const MENU_ITEMS: MenuItem[] = [
   {
-    label: 'Dashboard',
+    label: 'Caixa',
     href: '/dashboard',
     icon: Home,
     requiredFeature: FeatureModule.PDV,
     requiredPermission: FeaturePermissionLevel.ACCESS,
   },
   {
-    label: 'Venda (PDV)',
+    label: 'Nova Venda',
     href: '/dashboard/sales',
     icon: ShoppingCart,
     requiredFeature: FeatureModule.PDV,
-    requiredPermission: FeaturePermissionLevel.ACCESS, // User/Manager/Admin can sell
+    requiredPermission: FeaturePermissionLevel.ACCESS,
   },
   {
     label: 'Produtos',
     href: '/dashboard/products',
     icon: Package,
     requiredFeature: FeatureModule.PDV,
-    requiredPermission: FeaturePermissionLevel.ACCESS, // Or MANAGER? Let's say ACCESS for looking up
+    requiredPermission: FeaturePermissionLevel.ACCESS,
   },
   {
     label: 'Histórico',
@@ -37,6 +37,13 @@ export const MENU_ITEMS: MenuItem[] = [
     icon: History,
     requiredFeature: FeatureModule.PDV,
     requiredPermission: FeaturePermissionLevel.ACCESS,
+  },
+  {
+    label: 'Fechamento',
+    href: '/dashboard/closing',
+    icon: History,
+    requiredFeature: FeatureModule.PDV,
+    requiredPermission: FeaturePermissionLevel.ADMIN,
   },
   {
     label: 'Configurações',
