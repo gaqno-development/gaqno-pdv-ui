@@ -26,7 +26,7 @@ export default function App() {
         onTabChange={() => {}}
         layoutId="pdvActiveTab"
       >
-        <p className="text-muted-foreground mt-2">PDV functionality coming soon...</p>
+        <p className="text-muted-foreground mt-2" data-testid="pdv-placeholder">PDV functionality coming soon...</p>
       </PageLayout>
     </I18nProvider>
   )
