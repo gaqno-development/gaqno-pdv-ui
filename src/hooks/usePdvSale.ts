@@ -70,15 +70,14 @@ export function usePdvSale() {
   const createSaleMutation = useMutation({
     mutationFn: async () => {
       const { data } = await coreAxiosClient.erp.post("/orders", {
+        customerName: "Cliente PDV",
+        customerEmail: "pdv@loja.local",
         items: cart.map((item) => ({
           productId: item.product.id,
           quantity: item.quantity,
           unitPrice: item.product.price,
         })),
-        total,
-        source: "pdv",
-        paymentMethod,
-        notes: `Venda PDV - ${paymentMethod.toUpperCase()}`,
+        notes: `Venda PDV - ${paymentMethod.toUpperCase()} | Total: ${total.toFixed(2)}`,
       });
       return data;
     },

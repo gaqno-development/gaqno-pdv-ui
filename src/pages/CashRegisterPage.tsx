@@ -16,6 +16,7 @@ import { formatCurrency } from "@gaqno-development/frontcore/utils";
 import { useProductSearch } from "../hooks/useProductSearch";
 import { usePdvSale, type PaymentMethod } from "../hooks/usePdvSale";
 import { usePdvHistory } from "../hooks/usePdvHistory";
+import { toast } from "sonner";
 import {
   ShoppingCart,
   Plus,
@@ -47,9 +48,13 @@ export default function CashRegisterPage() {
 
   const handleCompleteSale = async () => {
     if (sale.cart.length === 0) return;
-    await sale.completeSale();
-    setSaleComplete(true);
-    setTimeout(() => setSaleComplete(false), 3000);
+    try {
+      await sale.completeSale();
+      setSaleComplete(true);
+      setTimeout(() => setSaleComplete(false), 3000);
+    } catch {
+      toast.error("Não foi possível finalizar a venda. Tente novamente.");
+    }
   };
 
   const kpiCards = [
