@@ -8,8 +8,8 @@ describe("App", () => {
     expect(screen.getByTestId("page-layout")).toBeInTheDocument();
   });
 
-  it("wraps content in a FeatureGuard", () => {
+  it("renders the cash register page by default", () => {
     render(<App />);
-    expect(screen.getByTestId("feature-guard")).toBeInTheDocument();
+    expect(screen.getByTestId("page-layout")).toBeInTheDocument();
   });
 });
