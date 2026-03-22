@@ -8,8 +8,8 @@ describe("App", () => {
     expect(screen.getByTestId("page-layout")).toBeInTheDocument();
   });
 
-  it("displays placeholder text", () => {
+  it("wraps content in a FeatureGuard", () => {
     render(<App />);
-    expect(screen.getByTestId("pdv-placeholder")).toBeInTheDocument();
+    expect(screen.getByTestId("feature-guard")).toBeInTheDocument();
   });
 });
