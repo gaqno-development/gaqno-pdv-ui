@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Pie, PieChart, Cell } from "recharts";
 import {
   Card,
@@ -14,15 +14,43 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   Button,
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@gaqno-development/frontcore/components/ui";
 import { formatCurrency } from "@gaqno-development/frontcore/utils";
+import { useUIStore } from "@gaqno-development/frontcore/store/uiStore";
 import { usePdvClosing } from "../hooks/usePdvClosing";
-import { Receipt, DollarSign, Hash, Lock } from "lucide-react";
+import { Receipt, DollarSign, Hash, Lock, Loader2 } from "lucide-react";
 
 const PIE_COLORS = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)"];
 
 export default function CashClosingPage() {
-  const { todaySalesCount, todayTotal, breakdown, isLoading } = usePdvClosing();
+  const { todaySalesCount, todayTotal, breakdown, isLoading, isClosing, closeTurn } = usePdvClosing();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const addNotification = useUIStore((s) => s.addNotification);
+
+  const handleConfirmClose = async () => {
+    try {
+      await closeTurn();
+      addNotification({
+        type: "success",
+        title: "Caixa fechado",
+        message: "O turno foi encerrado com sucesso.",
+        duration: 4000,
+      });
+      setDialogOpen(false);
+    } catch {
+      addNotification({
+        type: "error",
+        title: "Não foi possível fechar",
+        message: "Tente novamente em instantes.",
+        duration: 5000,
+      });
+    }
+  };
 
   const pieData = useMemo(
     () => breakdown.filter((b) => b.total > 0).map((b) => ({ name: b.label, value: b.total })),
@@ -122,13 +150,40 @@ export default function CashClosingPage() {
               <p className="text-sm font-medium">Fechar turno</p>
               <p className="text-xs text-muted-foreground">Encerre o caixa e gere o relatório do turno.</p>
             </div>
-            <Button variant="destructive" disabled={todaySalesCount === 0}>
-              <Lock className="h-4 w-4 mr-2" />
+            <Button
+              variant="destructive"
+              disabled={todaySalesCount === 0 || isClosing}
+              onClick={() => setDialogOpen(true)}
+            >
+              {isClosing ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Lock className="h-4 w-4 mr-2" />
+              )}
               Fechar caixa
             </Button>
           </CardContent>
         </Card>
       </AnimatedEntry>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Fechar caixa</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            Deseja fechar o caixa? Vendas: {todaySalesCount}, Total: {formatCurrency(todayTotal)}
+          </p>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setDialogOpen(false)} disabled={isClosing}>
+              Cancelar
+            </Button>
+            <Button type="button" variant="destructive" loading={isClosing} onClick={handleConfirmClose}>
+              Confirmar fechamento
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

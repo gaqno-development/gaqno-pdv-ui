@@ -12,12 +12,38 @@ import {
 } from "@gaqno-development/frontcore/components/ui";
 import { Settings, Save } from "lucide-react";
 
+const PDV_SETTINGS_KEY = "pdv-settings";
+
+type PdvSettingsState = {
+  receiptHeader: string;
+  receiptFooter: string;
+};
+
+function loadPdvSettings(): PdvSettingsState {
+  if (typeof window === "undefined") {
+    return { receiptHeader: "", receiptFooter: "" };
+  }
+  try {
+    const raw = localStorage.getItem(PDV_SETTINGS_KEY);
+    if (!raw) {
+      return { receiptHeader: "", receiptFooter: "" };
+    }
+    const p = JSON.parse(raw) as Record<string, unknown>;
+    return {
+      receiptHeader: typeof p.receiptHeader === "string" ? p.receiptHeader : "",
+      receiptFooter: typeof p.receiptFooter === "string" ? p.receiptFooter : "",
+    };
+  } catch {
+    return { receiptHeader: "", receiptFooter: "" };
+  }
+}
+
 export default function SettingsPage() {
-  const [receiptHeader, setReceiptHeader] = useState("");
-  const [receiptFooter, setReceiptFooter] = useState("");
+  const [settings, setSettings] = useState<PdvSettingsState>(() => loadPdvSettings());
   const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
+    localStorage.setItem(PDV_SETTINGS_KEY, JSON.stringify(settings));
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
@@ -47,8 +73,10 @@ export default function SettingsPage() {
               <Label htmlFor="receipt-header">Cabeçalho do recibo</Label>
               <Input
                 id="receipt-header"
-                value={receiptHeader}
-                onChange={(e) => setReceiptHeader(e.target.value)}
+                value={settings.receiptHeader}
+                onChange={(e) =>
+                  setSettings((s) => ({ ...s, receiptHeader: e.target.value }))
+                }
                 placeholder="Ex: Minha Loja — CNPJ 00.000.000/0001-00"
                 className="h-10"
               />
@@ -57,8 +85,10 @@ export default function SettingsPage() {
               <Label htmlFor="receipt-footer">Rodapé do recibo</Label>
               <Input
                 id="receipt-footer"
-                value={receiptFooter}
-                onChange={(e) => setReceiptFooter(e.target.value)}
+                value={settings.receiptFooter}
+                onChange={(e) =>
+                  setSettings((s) => ({ ...s, receiptFooter: e.target.value }))
+                }
                 placeholder="Ex: Obrigado pela preferência!"
                 className="h-10"
               />

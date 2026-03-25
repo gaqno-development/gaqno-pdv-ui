@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { usePdvHistory } from "./usePdvHistory";
 import type { PaymentMethod } from "./usePdvSale";
 
@@ -18,6 +18,16 @@ const PAYMENT_LABELS: Record<string, string> = {
 
 export function usePdvClosing() {
   const { todaySales, todayTotal, isLoading } = usePdvHistory();
+  const [isClosing, setIsClosing] = useState(false);
+
+  const closeTurn = useCallback(async () => {
+    setIsClosing(true);
+    try {
+      await new Promise<void>((resolve) => setTimeout(resolve, 600));
+    } finally {
+      setIsClosing(false);
+    }
+  }, []);
 
   const breakdown = useMemo<PaymentBreakdown[]>(() => {
     const map: Record<string, { total: number; count: number }> = {};
@@ -42,5 +52,7 @@ export function usePdvClosing() {
     itemsSold: todaySales.length,
     breakdown,
     isLoading,
+    isClosing,
+    closeTurn,
   };
 }

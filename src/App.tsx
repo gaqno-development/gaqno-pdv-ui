@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ToastContainer } from "@gaqno-development/frontcore/components/ui";
 import { PageLayout } from "@gaqno-development/frontcore/components/layout";
 import { initI18n, I18nProvider, useTranslation } from "@gaqno-development/frontcore/i18n";
 import { PdvLayout } from "./components/layout/PdvLayout";
@@ -45,6 +46,7 @@ export default function App() {
 
   return (
     <I18nProvider>
+      <ToastContainer />
       <PdvLayout>
         <PageLayout
           title="Ponto de Venda"

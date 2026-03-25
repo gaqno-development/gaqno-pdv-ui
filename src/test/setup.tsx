@@ -45,6 +45,13 @@ vi.mock("@gaqno-development/frontcore/components/ui", () => ({
   ChartContainer: ({ children }: any) => <div>{children}</div>,
   ChartTooltip: () => null,
   ChartTooltipContent: () => null,
+  ToastContainer: () => null,
+  Dialog: ({ children, open, onOpenChange }: any) =>
+    open ? <div data-testid="dialog">{children}</div> : null,
+  DialogContent: ({ children }: any) => <div>{children}</div>,
+  DialogHeader: ({ children }: any) => <div>{children}</div>,
+  DialogTitle: ({ children }: any) => <div>{children}</div>,
+  DialogFooter: ({ children }: any) => <div>{children}</div>,
 }));
 
 vi.mock("@gaqno-development/frontcore/utils", () => ({
