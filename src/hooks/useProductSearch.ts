@@ -24,5 +24,6 @@ export function useProductSearch() {
     setSearch,
     isLoading: productsQuery.isLoading,
     isError: productsQuery.isError,
+    refetch: productsQuery.refetch,
   };
 }

@@ -20,7 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@gaqno-development/frontcore/components/ui";
-import { formatCurrency } from "@gaqno-development/frontcore/utils";
+import { formatCurrency, formatDateTime } from "@gaqno-development/frontcore/utils";
 import { useUIStore } from "@gaqno-development/frontcore/store/uiStore";
 import { usePdvClosing } from "../hooks/usePdvClosing";
 import { Receipt, DollarSign, Hash, Lock, Loader2 } from "lucide-react";
@@ -28,7 +28,15 @@ import { Receipt, DollarSign, Hash, Lock, Loader2 } from "lucide-react";
 const PIE_COLORS = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)"];
 
 export default function CashClosingPage() {
-  const { todaySalesCount, todayTotal, breakdown, isLoading, isClosing, closeTurn } = usePdvClosing();
+  const {
+    todaySalesCount,
+    todayTotal,
+    breakdown,
+    isLoading,
+    isClosing,
+    closeTurn,
+    lastClosing,
+  } = usePdvClosing();
   const [dialogOpen, setDialogOpen] = useState(false);
   const addNotification = useUIStore((s) => s.addNotification);
 
@@ -75,6 +83,39 @@ export default function CashClosingPage() {
           <StatCard title="Formas de pagamento" value={breakdown.filter((b) => b.count > 0).length} icon={Hash} isLoading={isLoading} />
         </div>
       </AnimatedEntry>
+
+      {lastClosing && (
+        <AnimatedEntry direction="up" delay={0.05}>
+          <Card>
+            <CardHeader>
+              <CardTitle>Comprovante do último fechamento</CardTitle>
+              <CardDescription>
+                Encerrado em {formatDateTime(lastClosing.closedAt)} · {lastClosing.transactionCount}{" "}
+                {lastClosing.transactionCount === 1 ? "venda" : "vendas"}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between rounded-lg bg-muted/30 px-4 py-3">
+                <span className="text-sm font-medium">Total do fechamento</span>
+                <span className="text-lg font-bold tabular-nums">{formatCurrency(lastClosing.totalAmount)}</span>
+              </div>
+              <div className="space-y-2">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Por forma de pagamento</p>
+                {lastClosing.breakdown
+                  .filter((b) => b.count > 0)
+                  .map((b) => (
+                    <div key={b.method} className="flex items-center justify-between text-sm">
+                      <span>
+                        {b.label} ({b.count})
+                      </span>
+                      <span className="tabular-nums font-medium">{formatCurrency(b.total)}</span>
+                    </div>
+                  ))}
+              </div>
+            </CardContent>
+          </Card>
+        </AnimatedEntry>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-2">
         <AnimatedEntry direction="up" delay={0.1}>

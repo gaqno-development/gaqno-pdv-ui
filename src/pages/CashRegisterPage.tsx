@@ -31,6 +31,7 @@ import {
   Hash,
   CheckCircle2,
   Search,
+  AlertCircle,
 } from "lucide-react";
 
 const PAYMENT_OPTIONS: { method: PaymentMethod; label: string; icon: typeof CreditCard }[] = [
@@ -41,9 +42,21 @@ const PAYMENT_OPTIONS: { method: PaymentMethod; label: string; icon: typeof Cred
 ];
 
 export default function CashRegisterPage() {
-  const { products, search, setSearch, isLoading: isLoadingProducts } = useProductSearch();
+  const {
+    products,
+    search,
+    setSearch,
+    isLoading: isLoadingProducts,
+    isError: isProductsError,
+    refetch: refetchProducts,
+  } = useProductSearch();
   const sale = usePdvSale();
-  const { todayTotal, todaySales } = usePdvHistory();
+  const {
+    todayTotal,
+    todaySales,
+    isError: isHistoryError,
+    refetch: refetchHistory,
+  } = usePdvHistory();
   const [saleComplete, setSaleComplete] = useState(false);
 
   const handleCompleteSale = async () => {
@@ -66,18 +79,28 @@ export default function CashRegisterPage() {
   return (
     <div className="space-y-6">
       <AnimatedEntry direction="fade" duration={0.2}>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {kpiCards.map((card, i) => (
-            <StatCard
-              key={card.title}
-              title={card.title}
-              value={card.value}
-              icon={card.icon}
-              variant="compact"
-              size="sm"
-            />
-          ))}
-        </div>
+        {isHistoryError ? (
+          <div className="flex flex-col items-center justify-center gap-3 py-12 rounded-lg border border-border">
+            <AlertCircle className="h-8 w-8 text-destructive" />
+            <p className="text-sm text-muted-foreground">Erro ao carregar dados</p>
+            <Button variant="outline" size="sm" onClick={() => refetchHistory()}>
+              Tentar novamente
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {kpiCards.map((card, i) => (
+              <StatCard
+                key={card.title}
+                title={card.title}
+                value={card.value}
+                icon={card.icon}
+                variant="compact"
+                size="sm"
+              />
+            ))}
+          </div>
+        )}
       </AnimatedEntry>
 
       {saleComplete && (
@@ -106,6 +129,14 @@ export default function CashRegisterPage() {
               {Array.from({ length: 6 }).map((_, i) => (
                 <Skeleton key={i} className="h-32 rounded-xl" />
               ))}
+            </div>
+          ) : isProductsError ? (
+            <div className="flex flex-col items-center justify-center gap-3 py-12">
+              <AlertCircle className="h-8 w-8 text-destructive" />
+              <p className="text-sm text-muted-foreground">Erro ao carregar dados</p>
+              <Button variant="outline" size="sm" onClick={() => refetchProducts()}>
+                Tentar novamente
+              </Button>
             </div>
           ) : products.length === 0 ? (
             <EmptyState

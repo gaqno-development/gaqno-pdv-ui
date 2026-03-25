@@ -8,11 +8,12 @@ import {
   EmptyState,
   LoadingSkeleton,
   StatCard,
+  Button,
 } from "@gaqno-development/frontcore/components/ui";
 import { formatCurrency, formatDateTime } from "@gaqno-development/frontcore/utils";
 import { usePdvHistory } from "../hooks/usePdvHistory";
 import type { ErpOrder, ErpOrderStatus } from "@gaqno-development/types";
-import { Receipt, DollarSign, ShoppingCart } from "lucide-react";
+import { AlertCircle, Receipt, DollarSign, ShoppingCart } from "lucide-react";
 
 const STATUS_LABEL: Record<string, string> = {
   pending: "Pendente", confirmed: "Confirmado", processing: "Em processamento",
@@ -25,7 +26,7 @@ const STATUS_VARIANT: Record<string, "secondary" | "default" | "destructive" | "
 };
 
 export default function SalesHistoryPage() {
-  const { orders, todayTotal, todaySales, isLoading } = usePdvHistory();
+  const { orders, todayTotal, todaySales, isLoading, isError, refetch } = usePdvHistory();
 
   const columns: ColumnDef<ErpOrder>[] = [
     {
@@ -76,6 +77,18 @@ export default function SalesHistoryPage() {
       ),
     },
   ];
+
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-3 py-12">
+        <AlertCircle className="h-8 w-8 text-destructive" />
+        <p className="text-sm text-muted-foreground">Erro ao carregar dados</p>
+        <Button variant="outline" size="sm" onClick={() => refetch()}>
+          Tentar novamente
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

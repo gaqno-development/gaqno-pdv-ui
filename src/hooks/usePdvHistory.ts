@@ -1,19 +1,37 @@
-import { useMemo } from "react";
+import { useMemo, useState, useCallback } from "react";
+import type { ErpOrder } from "@gaqno-development/types";
 import { useErpOrders } from "@gaqno-development/frontcore/hooks/erp";
+import {
+  getShiftStartedAt,
+  setShiftStartedAt,
+  effectiveShiftStartISO,
+} from "../utils/pdvShiftStorage";
+import { isPdvOrder } from "../utils/pdvOrderPayment";
 
 export function usePdvHistory() {
   const ordersQuery = useErpOrders({ limit: 500 });
   const allOrders = ordersQuery.data ?? [];
+  const [shiftStartedAt, setShiftStartedAtState] = useState(() => getShiftStartedAt());
+
+  const bumpShiftAfterClose = useCallback(() => {
+    const next = new Date().toISOString();
+    setShiftStartedAt(next);
+    setShiftStartedAtState(next);
+  }, []);
 
   const pdvOrders = useMemo(
-    () => allOrders.filter((o) => (o as any).source === "pdv" || o.notes?.includes("Venda PDV")),
+    () => allOrders.filter((o) => isPdvOrder(o as ErpOrder)),
     [allOrders],
   );
 
+  const effectiveShift = useMemo(
+    () => effectiveShiftStartISO(shiftStartedAt),
+    [shiftStartedAt],
+  );
+
   const todaySales = useMemo(() => {
-    const today = new Date().toISOString().slice(0, 10);
-    return pdvOrders.filter((o) => o.createdAt?.startsWith(today));
-  }, [pdvOrders]);
+    return pdvOrders.filter((o) => o.createdAt && o.createdAt >= effectiveShift);
+  }, [pdvOrders, effectiveShift]);
 
   const todayTotal = useMemo(
     () =>
@@ -31,5 +49,7 @@ export function usePdvHistory() {
     totalSales: pdvOrders.length,
     isLoading: ordersQuery.isLoading,
     isError: ordersQuery.isError,
+    refetch: ordersQuery.refetch,
+    bumpShiftAfterClose,
   };
 }
