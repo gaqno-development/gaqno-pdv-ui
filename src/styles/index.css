@@ -1,3 +1,17 @@
 @import "@gaqno-development/frontcore/styles/globals.css";
 @source "../**/*.{js,ts,jsx,tsx}";
 @source "../../index.html";
+
+:root {
+  --pdv-accent: hsl(158 46% 44%);
+  --pdv-accent-strong: hsl(158 48% 34%);
+  --pdv-accent-soft: hsl(158 28% 94%);
+  --pdv-accent-ring: hsl(158 46% 44% / 0.32);
+}
+
+.dark {
+  --pdv-accent: hsl(158 36% 58%);
+  --pdv-accent-strong: hsl(158 40% 66%);
+  --pdv-accent-soft: hsl(158 28% 16%);
+  --pdv-accent-ring: hsl(158 36% 58% / 0.32);
+}

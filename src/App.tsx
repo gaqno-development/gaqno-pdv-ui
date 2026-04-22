@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ToastContainer } from "@gaqno-development/frontcore/components/ui";
-import { PageLayout } from "@gaqno-development/frontcore/components/layout";
 import { initI18n, I18nProvider, useTranslation } from "@gaqno-development/frontcore/i18n";
 import { PdvLayout } from "./components/layout/PdvLayout";
 import CashRegisterPage from "./pages/CashRegisterPage";
@@ -33,7 +32,7 @@ const TAB_COMPONENTS: Record<string, React.ComponentType> = {
 };
 
 export default function App() {
-  const { t } = useTranslation("navigation");
+  const { t: _t } = useTranslation("navigation");
   const [activeTab, setActiveTab] = useState("caixa");
 
   const tabs = TAB_KEYS.map((tab) => ({
@@ -47,16 +46,13 @@ export default function App() {
   return (
     <I18nProvider>
       <ToastContainer />
-      <PdvLayout>
-        <PageLayout
-          title="Ponto de Venda"
-          tabs={tabs}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          layoutId="pdvActiveTab"
-        >
-          <ActivePage />
-        </PageLayout>
+      <PdvLayout
+        title="Ponto de Venda"
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      >
+        <ActivePage />
       </PdvLayout>
     </I18nProvider>
   );
