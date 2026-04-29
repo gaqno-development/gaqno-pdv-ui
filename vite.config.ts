@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import federation from '@originjs/vite-plugin-federation'
+import path from 'path'
 import { FEDERATION_SHARED } from '@gaqno-development/frontcore/config/federation-shared'
 
 export default defineConfig(async () => {
@@ -8,6 +9,12 @@ export default defineConfig(async () => {
 	
 	return {
 	base: '/',
+	resolve: {
+		alias: {
+			'@': path.resolve(__dirname, './src'),
+			'@pages': path.resolve(__dirname, './src/pages'),
+		},
+	},
 	server: {
 		port: 3006,
 		origin: 'http://localhost:3006',
