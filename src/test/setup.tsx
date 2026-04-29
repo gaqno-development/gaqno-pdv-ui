@@ -14,6 +14,7 @@ vi.mock("@gaqno-development/frontcore/components/layout", () => ({
       {children}
     </div>
   ),
+  MobileBottomNav: () => <nav data-testid="mobile-nav" />,
 }));
 
 vi.mock("@gaqno-development/frontcore/components/guards", () => ({

@@ -22,7 +22,7 @@ import {
 } from "@gaqno-development/frontcore/components/ui";
 import { formatCurrency, formatDateTime } from "@gaqno-development/frontcore/utils";
 import { useUIStore } from "@gaqno-development/frontcore/store/uiStore";
-import { usePdvClosing } from "../hooks/usePdvClosing";
+import { usePdvClosing } from "../../hooks/usePdvClosing";
 import { Receipt, DollarSign, Hash, Lock, Loader2 } from "lucide-react";
 
 const PIE_COLORS = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)"];

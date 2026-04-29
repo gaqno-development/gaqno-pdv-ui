@@ -2,10 +2,10 @@ import { useState } from "react";
 import { ToastContainer } from "@gaqno-development/frontcore/components/ui";
 import { initI18n, I18nProvider, useTranslation } from "@gaqno-development/frontcore/i18n";
 import { PdvLayout } from "./components/layout/PdvLayout";
-import CashRegisterPage from "./pages/CashRegisterPage";
-import SalesHistoryPage from "./pages/SalesHistoryPage";
-import CashClosingPage from "./pages/CashClosingPage";
-import SettingsPage from "./pages/SettingsPage";
+import CashRegisterPage from "./pages/CashRegister/CashRegisterPage";
+import SalesHistoryPage from "./pages/SalesHistory/SalesHistoryPage";
+import CashClosingPage from "./pages/CashClosing/CashClosingPage";
+import SettingsPage from "./pages/Settings/SettingsPage";
 import { ShoppingCart, History, Lock, Settings } from "lucide-react";
 
 initI18n();

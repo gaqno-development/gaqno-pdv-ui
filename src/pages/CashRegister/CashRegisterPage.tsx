@@ -13,9 +13,9 @@ import {
   EmptyState,
 } from "@gaqno-development/frontcore/components/ui";
 import { formatCurrency } from "@gaqno-development/frontcore/utils";
-import { useProductSearch } from "../hooks/useProductSearch";
-import { usePdvSale, type PaymentMethod } from "../hooks/usePdvSale";
-import { usePdvHistory } from "../hooks/usePdvHistory";
+import { useProductSearch } from "../../hooks/useProductSearch";
+import { usePdvSale, type PaymentMethod } from "../../hooks/usePdvSale";
+import { usePdvHistory } from "../../hooks/usePdvHistory";
 import { toast } from "sonner";
 import {
   ShoppingCart,

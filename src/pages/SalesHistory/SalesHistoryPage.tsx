@@ -11,7 +11,7 @@ import {
   Button,
 } from "@gaqno-development/frontcore/components/ui";
 import { formatCurrency, formatDateTime } from "@gaqno-development/frontcore/utils";
-import { usePdvHistory } from "../hooks/usePdvHistory";
+import { usePdvHistory } from "../../hooks/usePdvHistory";
 import type { ErpOrder, ErpOrderStatus } from "@gaqno-development/types";
 import { AlertCircle, Receipt, DollarSign, ShoppingCart } from "lucide-react";
 

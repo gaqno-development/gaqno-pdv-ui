@@ -1,15 +1,19 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import App from "../App";
 
 describe("App", () => {
-  it("renders the page layout with PDV title", () => {
+  it("renders PDV shell title", () => {
     render(<App />);
-    expect(screen.getByTestId("page-layout")).toBeInTheDocument();
+    expect(screen.getByText("Ponto de Venda")).toBeInTheDocument();
   });
 
-  it("renders the cash register page by default", () => {
+  it("shows Caixa as the active section tab", () => {
     render(<App />);
-    expect(screen.getByTestId("page-layout")).toBeInTheDocument();
+    const nav = screen.getByRole("navigation", { name: "PDV sections" });
+    expect(within(nav).getByRole("button", { name: "Caixa" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
   });
 });
