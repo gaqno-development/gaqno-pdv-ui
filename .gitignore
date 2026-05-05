@@ -53,3 +53,5 @@ coverage-summary.json
 coverage-final.json
 coverage-report/
 .nyc_output/
+
+.jest-cache
